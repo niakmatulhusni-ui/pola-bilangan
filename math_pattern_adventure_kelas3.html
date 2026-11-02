@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Pattern Adventure - Kelas 3</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--cyan:#06b6d4;--gold:#fbbf24;--coral:#fb7185;--ink:#172033;--muted:#64748b;--paper:#fff;--bg:#eef6ff;--green:#16a34a}
+*{box-sizing:border-box}
+body{margin:0;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 10%,#dbeafe 0 10%,transparent 30%),radial-gradient(circle at 90% 20%,#cffafe 0 8%,transparent 25%),linear-gradient(135deg,#f8fbff,#eaf3ff);min-height:100vh;padding:22px}
+.wrap{max-width:850px;margin:auto}
+.hero{background:linear-gradient(120deg,#172554,#1d4ed8 65%,#0891b2);color:white;border-radius:26px;padding:25px 28px;position:relative;overflow:hidden;box-shadow:0 14px 35px #1e3a8a2b}
+.hero:after{content:"✦  ✧  ★";position:absolute;right:22px;top:16px;font-size:30px;color:#fde68a;letter-spacing:10px;opacity:.9}
+.kicker{font-size:12px;letter-spacing:2px;font-weight:800;color:#bae6fd;text-transform:uppercase}
+h1{font-size:clamp(25px,5vw,38px);line-height:1.08;margin:9px 0}
+.hero p{margin:8px 0 0;color:#e0f2fe}
+.card{background:white;border:1px solid #dbeafe;border-radius:22px;padding:23px;margin-top:18px;box-shadow:0 10px 25px #1e3a8a0d}
+h2{margin:0 0 12px;color:var(--navy);font-size:21px}
+label{display:block;font-weight:800;margin:13px 0 6px}
+input,select{font:inherit}
+.identity{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.identity input{width:100%;padding:13px 14px;border:2px solid #cbd5e1;border-radius:12px;outline:none}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #bfdbfe}
+.btn{border:0;border-radius:13px;padding:13px 20px;font:inherit;font-weight:900;cursor:pointer;transition:.15s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+.primary{background:var(--gold);color:#422006;box-shadow:0 4px 0 #d97706}
+.secondary{background:#dbeafe;color:#1e40af}
+.progressline{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:14px 0 7px}
+.progressfill{height:100%;width:0;background:linear-gradient(90deg,#06b6d4,#2563eb);transition:width .3s}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;font-weight:800}
+.tag{display:inline-block;background:#eff6ff;color:#1d4ed8;border-radius:99px;padding:6px 11px;font-size:12px;font-weight:900}
+.sequence{font-size:clamp(22px,5vw,32px);font-weight:1000;letter-spacing:2px;text-align:center;background:#eff6ff;border:2px dashed #93c5fd;border-radius:17px;padding:22px 10px;margin:18px 0;color:#1e3a8a}
+.answer-area{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0}
+.answer-area input{width:105px;text-align:center;font-size:23px;font-weight:900;padding:12px;border:2px solid #cbd5e1;border-radius:13px}
+.choice{background:#f8fafc;border:2px solid #cbd5e1;border-radius:14px;padding:14px 18px;font-size:19px;font-weight:900;cursor:pointer;min-width:90px}
+.choice.selected{border-color:#2563eb;background:#dbeafe;color:#1e40af}
+.feedback{padding:13px 15px;border-radius:13px;margin:14px 0;font-weight:800;display:none}
+.feedback.good{display:block;background:#dcfce7;color:#166534}
+.feedback.bad{display:block;background:#ffedd5;color:#9a3412}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.small{font-size:13px;color:var(--muted)}
+.hidden{display:none!important}
+.result{text-align:center}
+.bigscore{font-size:52px;font-weight:1000;color:#1d4ed8}
+.stars{font-size:32px;letter-spacing:5px}
+.review{margin-top:15px;text-align:left;background:#f8fafc;padding:14px;border-radius:13px}
+@media(max-width:600px){body{padding:12px}.identity{grid-template-columns:1fr}.card{padding:18px}.hero{padding:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">Petualangan Matematika • Kelas 3 SD</div>
+    <h1>🔎 Math Pattern Adventure</h1>
+    <p>Jadilah detektif angka! Temukan aturan tersembunyi dan selesaikan 12 tantangan pola bilangan.</p>
+  </header>
+
+  <section class="card" id="identityCard">
+    <h2>🌟 Siapa detektif hari ini?</h2>
+    <div class="identity">
+      <div><label for="studentName">Nama siswa</label><input id="studentName" placeholder="Tulis nama lengkapmu" autocomplete="name"></div>
+      <div><label for="studentClass">Kelas</label><input id="studentClass" placeholder="Contoh: 3A"></div>
+    </div>
+    <p class="small">Isi nama dan kelas sebelum memulai petualangan.</p>
+    <div class="actions"><button class="btn primary" id="startBtn">Mulai Petualangan 🚀</button></div>
+    <div class="feedback bad" id="identityError">Nama dan kelas perlu diisi terlebih dahulu, ya!</div>
+  </section>
+
+  <section class="card hidden" id="quizCard">
+    <div class="meta"><span id="studentLabel"></span><span id="questionCount">Soal 1 dari 12</span></div>
+    <div class="progressline"><div class="progressfill" id="progress"></div></div>
+    <div class="meta"><span id="category" class="tag">Pola naik</span><span id="retryInfo">Kesempatan: 2 kali</span></div>
+    <h2 id="questionTitle" style="margin-top:18px">Tantangan 1</h2>
+    <div class="sequence" id="sequence"></div>
+    <p id="instruction" style="text-align:center;font-weight:800"></p>
+    <div class="answer-area" id="answerArea"></div>
+    <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn primary" id="checkBtn">Periksa Jawaban ✓</button>
+      <button class="btn secondary hidden" id="nextBtn">Lanjut ➜</button>
+    </div>
+    <p class="small" style="text-align:center;margin-top:15px">Jika jawaban belum tepat, kamu boleh mencoba sekali lagi. Semangat!</p>
+  </section>
+
+  <section class="card result hidden" id="resultCard">
+    <div class="stars">🏆 ⭐ 🎉</div>
+    <h2>Petualangan Selesai!</h2>
+    <p id="resultName"></p>
+    <div class="bigscore" id="scoreText">0/12</div>
+    <p id="resultMessage"></p>
+    <div class="review" id="review"></div>
+    <div class="actions"><button class="btn primary" onclick="location.reload()">Main Lagi ↻</button><button class="btn secondary" id="printBtn">Cetak Hasil 🖨️</button></div>
+  </section>
+</div>
+<script>
+const questions = [
+ {cat:"Pola bilangan naik",title:"Tangga Angka",seq:"4, 8, 12, □, □",instruction:"Isi dua bilangan yang hilang.",answers:[16,20],kind:"inputs",hint:""},
+ {cat:"Pola bilangan naik",title:"Lompatan Lima",seq:"7, 12, 17, 22, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[27,32],kind:"inputs"},
+ {cat:"Pola bilangan naik",title:"Pola Bertumbuh",seq:"3, 6, 10, 15, 21, □, □, □",instruction:"Isi tiga bilangan berikutnya.",answers:[28,36,45],kind:"inputs"},
+ {cat:"Pola bilangan turun",title:"Mundur Lima",seq:"65, 60, 55, 50, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[45,40],kind:"inputs"},
+ {cat:"Pola bilangan turun",title:"Turun Teratur",seq:"96, 88, 80, 72, □, □",instruction:"Pilih dua bilangan yang tepat secara berurutan.",answers:[64,56],kind:"choices",options:[[64,56],[66,58],[62,54],[68,60]]},
+ {cat:"Pola perkalian",title:"Kekuatan Kali Dua",seq:"2, 4, 8, 16, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[32,64],kind:"inputs"},
+ {cat:"Pola perkalian",title:"Lipat Ganda",seq:"3, 6, 12, 24, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[48,96],kind:"inputs"},
+ {cat:"Pola Fibonacci",title:"Pasangan Angka",seq:"1, 2, 3, 5, 8, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[13,21],kind:"inputs"},
+ {cat:"Pola Fibonacci",title:"Deret Penjelajah",seq:"2, 3, 5, 8, 13, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[21,34],kind:"inputs"},
+ {cat:"Pola ganjil dan genap",title:"Dua Jalur Angka",seq:"2, 10, 4, 15, 6, 20, □, □",instruction:"Pilih pasangan angka yang tepat.",answers:[8,25],kind:"choices",options:[[8,25],[8,24],[7,25],[10,25]]},
+ {cat:"Pola ganjil dan genap",title:"Jalur yang Berlawanan",seq:"30, 5, 25, 10, 20, 15, □, □",instruction:"Isi dua bilangan berikutnya.",answers:[15,20],kind:"inputs"},
+ {cat:"Pola ganjil dan genap",title:"Misi Detektif Terakhir",seq:"1, 20, 3, 18, 5, 16, □, □, □",instruction:"Isi tiga bilangan berikutnya.",answers:[7,14,9],kind:"inputs"}
+];
+let index=0, attempts=0, score=0, selected=null, outcomes=[];
+const $=id=>document.getElementById(id);
+$("startBtn").addEventListener("click",()=>{
+ const name=$("studentName").value.trim(), cls=$("studentClass").value.trim();
+ if(!name||!cls){$("identityError").style.display="block";return}
+ $("identityError").style.display="none";$("studentLabel").textContent=`👤 ${name} • Kelas ${cls}`;
+ $("identityCard").classList.add("hidden");$("quizCard").classList.remove("hidden");renderQuestion();
+});
+function renderQuestion(){
+ const q=questions[index];attempts=0;selected=null;
+ $("questionCount").textContent=`Soal ${index+1} dari ${questions.length}`;
+ $("progress").style.width=`${index/questions.length*100}%`;
+ $("category").textContent=q.cat;$("questionTitle").textContent=`Tantangan ${index+1} — ${q.title}`;
+ $("sequence").textContent=q.seq;$("instruction").textContent=q.instruction;
+ $("retryInfo").textContent="Kesempatan: 2 kali";
+ $("feedback").className="feedback";$("feedback").textContent="";
+ $("checkBtn").classList.remove("hidden");$("nextBtn").classList.add("hidden");
+ const area=$("answerArea");area.innerHTML="";
+ if(q.kind==="inputs"){
+   q.answers.forEach((_,i)=>{const inp=document.createElement("input");inp.type="number";inp.inputMode="numeric";inp.id=`answer${i}`;inp.placeholder=`Angka ${i+1}`;inp.setAttribute("aria-label",`Jawaban ${i+1}`);area.appendChild(inp)});
+ } else {
+   q.options.forEach((pair,i)=>{const b=document.createElement("button");b.type="button";b.className="choice";b.textContent=pair.join("  •  ");b.addEventListener("click",()=>{selected=i;[...area.children].forEach(x=>x.classList.remove("selected"));b.classList.add("selected")});area.appendChild(b)});
+ }
+}
+function getAnswers(){
+ const q=questions[index];
+ if(q.kind==="inputs")return q.answers.map((_,i)=>{const v=$(`answer${i}`).value.trim();return v===""?null:Number(v)});
+ return selected===null?null:q.options[selected];
+}
+$("checkBtn").addEventListener("click",()=>{
+ const q=questions[index],given=getAnswers(),fb=$("feedback");
+ if(given===null || (Array.isArray(given)&&given.some(x=>x===null))){fb.className="feedback bad";fb.textContent="Ups! Lengkapi semua jawaban dulu, ya.";return}
+ const correct=Array.isArray(given)&&given.length===q.answers.length&&given.every((v,i)=>v===q.answers[i]);
+ if(correct){
+   score++;outcomes.push({ok:true,tries:attempts+1});
+   fb.className="feedback good";fb.textContent=attempts===0?"Hebat! Jawabanmu tepat pada percobaan pertama! 🌟":"Yeay! Kamu berhasil pada percobaan kedua! 🎉";
+   finishQuestion();
+ }else if(attempts===0){
+   attempts=1;$("retryInfo").textContent="Kesempatan tersisa: 1 kali";
+   fb.className="feedback bad";fb.textContent="Belum tepat. Coba sekali lagi! Perhatikan jarak atau hubungan antarbilangan. 💡";
+   if(q.kind==="choices"){selected=null;[...$("answerArea").children].forEach(x=>x.classList.remove("selected"))}
+   else q.answers.forEach((_,i)=>{$(`answer${i}`).value=""});
+ }else{
+   outcomes.push({ok:false,tries:2});fb.className="feedback bad";
+   fb.textContent=`Kesempatan sudah digunakan. Jawaban yang tepat: ${q.answers.join(", ")}. Tetap semangat!`;
+   finishQuestion();
+ }
+});
+function finishQuestion(){
+ $("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");
+ $("nextBtn").textContent=index===questions.length-1?"Lihat Hasil 🏆":"Soal Berikutnya ➜";
+}
+$("nextBtn").addEventListener("click",()=>{
+ index++;
+ if(index<questions.length)renderQuestion();else showResult();
+});
+function showResult(){
+ $("quizCard").classList.add("hidden");$("resultCard").classList.remove("hidden");
+ $("progress").style.width="100%";
+ const name=$("studentName").value.trim(),cls=$("studentClass").value.trim();
+ $("resultName").textContent=`${name} • Kelas ${cls}`;
+ $("scoreText").textContent=`${score} / ${questions.length}`;
+ $("resultMessage").textContent=score>=10?"Luar biasa! Kamu detektif pola bilangan yang hebat! 🌟":score>=7?"Bagus sekali! Terus berlatih agar makin jago. 💪":"Kamu sudah berusaha menyelesaikan semua misi. Ayo berlatih lagi! 🚀";
+ $("review").innerHTML="<b>Ringkasan hasil</b><br>"+outcomes.map((o,i)=>`Soal ${i+1}: ${o.ok?"✓ Berhasil":"✗ Belum tepat"} ${o.tries===2?"(setelah mencoba ulang)":""}`).join("<br>");
+}
+$("printBtn").addEventListener("click",()=>window.print());
+</script>
+</body>
+</html>
